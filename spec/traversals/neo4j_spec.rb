@@ -10,7 +10,7 @@ describe "neo4j Traversal" do
     User.transaction do
       Neo4j::Relationship.create(User.friends, @john, @allen, :since => 2000)
       Neo4j::Relationship.create(User.friends, @john, @denise, :since => 1999)
-      Neo4j::Relationship.create(User.friends, @allen, @jay, :since => 2005)
+      Neo4j::Relationship.create(User.friends, @jay, @allen, :since => 2005)
     end
   end
 
@@ -21,8 +21,8 @@ describe "neo4j Traversal" do
     friends.should_not include(@jay)
   end
 
-  it "should traverse friends at depth(:all)" do
-    friends = @john.outgoing(User.friends).depth(2)
+  it "should traverse friends and friends of friends" do
+    friends = @john.outgoing(User.friends).adapt_to_traverser.incoming(User.friends).depth(:all)
     friends.should include(@allen)
     friends.should include(@denise)
     friends.should include(@jay)
