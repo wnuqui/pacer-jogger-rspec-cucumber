@@ -1,0 +1,13 @@
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/
+.sass-cache/
+.idea/
+db/index/
+db/index.db
+db/neostore*
+db/active_tx_log
+db/messages.log
+db/nioneo_logical.log.active
+db/tm_tx_log.1
