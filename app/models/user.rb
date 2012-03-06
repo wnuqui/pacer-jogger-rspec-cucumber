@@ -5,15 +5,18 @@ class User < Neo4j::Rails::Model
   index :name
 
   def recommended_friends
-    # TODO: find how to get vertex using 'id'
-    vertex = pacer_graph.v(:name => name)
-    traversal = Jogger.new(vertex)
-    SocialNetwork::Pacer::Utils.route_to_neo4j(traversal.recommended)
+    SocialNetwork::Pacer::Utils.route_to_neo4j(pacer_traversal.recommended)
   end
 
   private
   def pacer_graph
     @graph = Pacer.neo4j(Neo4j.db.graph) unless defined?(@graph)
     @graph
+  end
+
+  def pacer_traversal
+    Jogger.new(
+      pacer_graph.vertex(id)
+    )
   end
 end
